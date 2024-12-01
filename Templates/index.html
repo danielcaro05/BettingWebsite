@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            padding: 1em;
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+        }
+        .container {
+            padding: 2em;
+            text-align: center;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 0.5em 1em;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1em;
+            margin: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Welcome to My Flask App
+    </header>
+    <div class="container">
+        <p>Hello, World!</p>
+        <a href="/schedule" style="text-decoration: none;">
+            <button>See Today's Schedule</button>
+        </a>
+        <a href="/roster/TOR" style="text-decoration: none;">
+            <button>See Today's Rosters</button>
+        </a>
+        <a href="/betting_form" style="text-decoration: none;">
+            <button>See Today's Bets</button>
+        </a>
+    </div>
+</body>
+</html>

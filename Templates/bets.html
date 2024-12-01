@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bets</title>
+</head>
+<body>
+    <h1>Bet Recommendations for {{ team }}</h1>
+    <ul>
+        {% for bet in bets %}
+            <li>{{ bet }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/">Back to Home</a>
+</body>
+</html>
