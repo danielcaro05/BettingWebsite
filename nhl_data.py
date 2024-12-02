@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from datetime import timedelta, datetime
 import pandas as pd
-import requests
 import json
 import copy
 import os
