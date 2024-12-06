@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request
-from nhl_data import get_schedule, get_team_roster, findBets
+from testy import get_schedule, get_team_roster, findBets
 
 app = Flask(__name__)
 
