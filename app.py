@@ -76,7 +76,37 @@ def add_parlay():
 
 @app.route('/view_parlays', methods=['GET', 'POST'])
 def view_parlays():
-    return render_template('ViewParlays/view_parlays.html')
+    selected_game = {
+        'gameId': '2024020433',
+        'awayTeamName': {
+                'short': 'TOR',
+                'long': 'Toronto Maple Leafs',
+                'Id': 10,
+            },
+        'homeTeamName': {
+                'short': 'PIT',
+                'long': 'Pittsburgh Penguins',
+                'Id': 5,
+            },
+    }
+
+    all_parlays = {
+        'gid': {
+            'game': selected_game,
+            'parlays': []
+        }
+    }
+
+    parlay1 = {
+        'legs': [
+            {'player': 'Crosby', 'bet': 'S', 'quantity': 2},
+            {'player': 'Matthews', 'bet': 'G', 'quantity': 1},
+        ],
+        'amount': 10,
+    }
+
+    all_parlays['gid']['parlays'].append(parlay1)
+    return render_template('view_parlays.html', parlays=all_parlays)
 
 @app.route('/choose_game', methods=['GET', 'POST'])
 def choose_game():
