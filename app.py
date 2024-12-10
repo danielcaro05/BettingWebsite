@@ -107,12 +107,17 @@ def view_parlays():
     }
 
     all_parlays['gid']['parlays'].append(parlay1)
-    return render_template('view_parlays.html', parlays=all_parlays)
+    return render_template('ViewParlays/view_parlays.html', parlays=all_parlays)
 
-@app.route('/choose_game', methods=['GET', 'POST'])
-def choose_game():
+@app.route('/to_view_parlays')
+def to_view_parlays():
     games = get_schedule()
-    return render_template('AddParlay/choose_game.html', games=games)
+    return render_template('choose_game.html', games=games, form_action='/view_parlays')
+
+@app.route('/to_add_parlay')
+def to_add_parlay():
+    games = get_schedule()
+    return render_template('choose_game.html', games=games, form_action='/add_parlay')
 
 @app.route('/save_parlay', methods=['POST'])
 def save_parlay():
