@@ -14,7 +14,7 @@ def schedule():
     if not games:
         return "No games available or an error occurred."
 
-    return render_template('schedule.html', games=games)
+    return render_template('Schedule/schedule.html', games=games)
 
 @app.route('/roster/<team>')
 def roster(team):
@@ -54,7 +54,11 @@ def betting_form():
 
 @app.route('/add_parlay', methods=['GET', 'POST'])
 def add_parlay():
-    return render_template('add_parlay.html')
+    selected_game = request.form.get('selectedGame')
+
+
+
+    return render_template('AddParlay/add_parlay.html', game=selected_game)
 
 @app.route('/view_parlays', methods=['GET', 'POST'])
 def view_parlays():
@@ -89,6 +93,11 @@ def view_parlays():
 
     all_parlays['gid']['parlays'].append(parlay1)
     return render_template('view_parlays.html', parlays=all_parlays)
+
+@app.route('/choose_game', methods=['GET', 'POST'])
+def choose_game():
+    games = get_schedule()
+    return render_template('AddParlay/choose_game.html', games=games)
 
 if __name__ == "__main__":
     app.run(debug=True)

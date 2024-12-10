@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GameChooser</title>
+</head>
+<body>
+    <h1>Choose a Game:</h1>
+    <form action="/add_parlay" method="POST">
+        {% if games and games|length > 0 %}
+            <select name="selectedGame" required>
+                <option value="" disabled selected>Select a Game</option>
+                {% for game in games %}
+                    <option value="{{ game }}">
+                        {{ game['startTime'] }}:
+                        {{ game['awayTeamName']['long'] }} ({{ game['awayTeamName']['short'] }})
+                        vs
+                        {{ game['homeTeamName']['long'] }} ({{ game['homeTeamName']['short'] }})
+                    </option>
+                {% endfor %}
+            </select>
+        {% else %}
+            <p>No games scheduled for today.</p>
+        {% endif %}
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
