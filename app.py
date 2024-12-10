@@ -52,5 +52,13 @@ def betting_form():
     games = get_schedule()
     return render_template('betting_form.html', games=games)
 
+@app.route('/add_parlay', methods=['GET', 'POST'])
+def add_parlay():
+    return render_template('add_parlay.html')
+
+@app.route('/view_parlays', methods=['GET', 'POST'])
+def view_parlays():
+    return render_template('view_parlays.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
