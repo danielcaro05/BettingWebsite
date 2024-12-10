@@ -23,6 +23,8 @@
         }
     </style>
     <script>
+        let parlayData = [];
+
         // Dynamically add a new leg row
         function addLegRow(playerNames) {
             const container = document.getElementById('legs-container');
@@ -69,6 +71,36 @@
             container.appendChild(legRow);
         }
 
+
+        // Gather data from the form and send it to the server
+        function submitParlay() {
+            parlayData = []; // Reset the parlay data
+            const legRows = document.querySelectorAll('.leg');
+
+            legRows.forEach(row => {
+                const player = row.querySelector('select[name="player"]').value;
+                const stat = row.querySelector('select[name="stat"]').value;
+                const number = row.querySelector('input[name="number"]').value;
+
+                if (player && stat && number) {
+                    parlayData.push({ player, stat, number });
+                }
+            });
+
+            // Send data to the backend
+            fetch('/save_parlay', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ parlays: parlayData }),
+            })
+            .then(response => response.json())
+            .then(data => alert('Parlay saved successfully!'))
+            .catch(error => console.error('Error:', error));
+        }
+
+
         // On window load, make the first player dropdown dynamic
         window.onload = function () {
             const initialPlayerDropdown = document.querySelector('select[name="player"]');
@@ -84,6 +116,9 @@
             document.querySelector('.add-leg-button').onclick = function () {
                 addLegRow(playerNames);
             };
+
+            // Bind submitParlay to the submit button
+            document.querySelector('.submit-parlay').onclick = submitParlay;
         };
     </script>
 </head>
@@ -107,6 +142,6 @@
         </div>
     </div>
     <button type="button" class="add-leg-button">+</button>
-    <button class="submit-parlay">Submit Parlay</button>
+    <button type="button" class="submit-parlay">Submit Parlay</button>
 </body>
 </html>

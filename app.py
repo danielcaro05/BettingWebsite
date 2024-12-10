@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from testy import get_schedule, get_team_roster, findBets
+import json
 
 app = Flask(__name__)
 
@@ -112,6 +113,17 @@ def view_parlays():
 def choose_game():
     games = get_schedule()
     return render_template('AddParlay/choose_game.html', games=games)
+
+@app.route('/save_parlay', methods=['POST'])
+def save_parlay():
+    data = request.get_json()  # Get the JSON data from the request
+    try:
+        # Save the data to parlays.json
+        with open('parlays.json', 'w') as f:
+            json.dump(data, f, indent=4)
+        return jsonify({"message": "Parlay saved successfully!"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
