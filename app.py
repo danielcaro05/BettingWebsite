@@ -55,10 +55,24 @@ def betting_form():
 @app.route('/add_parlay', methods=['GET', 'POST'])
 def add_parlay():
     selected_game = request.form.get('selectedGame')
+    awayAbb = selected_game.split(',')[0]
+    homeAbb = selected_game.split(',')[1]
 
+    awayRoster = get_team_roster(awayAbb)
+    homeRoster = get_team_roster(homeAbb)
 
+    awayNames = []
+    homeNames = []
 
-    return render_template('AddParlay/add_parlay.html', game=selected_game)
+    for player in awayRoster:
+        awayNames.append(player['name'])
+
+    for player in homeRoster:
+        homeNames.append(player['name'])
+
+    playerNames = awayNames + homeNames
+
+    return render_template('AddParlay/add_parlay.html', game=selected_game, playerNames=playerNames)
 
 @app.route('/view_parlays', methods=['GET', 'POST'])
 def view_parlays():
