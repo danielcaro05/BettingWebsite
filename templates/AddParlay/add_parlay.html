@@ -2,9 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Parlay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        .leg {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .leg select, .leg input {
+            margin-right: 10px;
+        }
+        .add-leg-button, .submit-parlay {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function addLegRow() {
+            const container = document.getElementById('legs-container');
+
+            // Create a new leg row
+            const legRow = document.createElement('div');
+            legRow.className = 'leg';
+
+            // Dropdown for player
+            const playerDropdown = document.createElement('select');
+            playerDropdown.name = 'player';
+            playerDropdown.innerHTML = `
+                <option value="" disabled selected>Select Player</option>
+                <option value="player1">Player 1</option>
+                <option value="player2">Player 2</option>
+                <option value="player3">Player 3</option>
+            `;
+            legRow.appendChild(playerDropdown);
+
+            // Dropdown for stat
+            const statDropdown = document.createElement('select');
+            statDropdown.name = 'stat';
+            statDropdown.innerHTML = `
+                <option value="" disabled selected>Select Stat</option>
+                <option value="goals">Goals</option>
+                <option value="assists">Assists</option>
+                <option value="points">Points</option>
+                <option value="shots">Shots</option>
+            `;
+            legRow.appendChild(statDropdown);
+
+            // Input for the number
+            const numberInput = document.createElement('input');
+            numberInput.type = 'number';
+            numberInput.name = 'number';
+            numberInput.placeholder = 'Enter Number';
+            numberInput.min = '0';
+            legRow.appendChild(numberInput);
+
+            // Add the leg row to the container
+            container.appendChild(legRow);
+        }
+    </script>
 </head>
 <body>
-
+    <h1>Add Parlay</h1>
+    <div id="legs-container">
+        <!-- Default leg row -->
+        <div class="leg">
+            <select name="player">
+                <option value="" disabled selected>Select Player</option>
+                <option value="player1">Player 1</option>
+                <option value="player2">Player 2</option>
+                <option value="player3">Player 3</option>
+            </select>
+            <select name="stat">
+                <option value="" disabled selected>Select Stat</option>
+                <option value="goals">Goals</option>
+                <option value="assists">Assists</option>
+                <option value="points">Points</option>
+                <option value="shots">Shots</option>
+            </select>
+            <input type="number" name="number" placeholder="Enter Number" min="0">
+        </div>
+    </div>
+    <button type="button" class="add-leg-button" onclick="addLegRow()">+</button>
+    <button class="submit-parlay">Submit Parlay</button>
 </body>
 </html>
