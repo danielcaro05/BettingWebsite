@@ -23,7 +23,8 @@
         }
     </style>
     <script>
-        function addLegRow() {
+        // Dynamically add a new leg row
+        function addLegRow(playerNames) {
             const container = document.getElementById('legs-container');
 
             // Create a new leg row
@@ -33,12 +34,15 @@
             // Dropdown for player
             const playerDropdown = document.createElement('select');
             playerDropdown.name = 'player';
-            playerDropdown.innerHTML = `
-                <option value="" disabled selected>Select Player</option>
-                <option value="player1">Player 1</option>
-                <option value="player2">Player 2</option>
-                <option value="player3">Player 3</option>
-            `;
+            playerDropdown.innerHTML = `<option value="" disabled selected>Select Player</option>`;
+
+            // Add players dynamically to the dropdown
+            playerNames.forEach(player => {
+                const option = document.createElement('option');
+                option.value = player;
+                option.textContent = player;
+                playerDropdown.appendChild(option);
+            });
             legRow.appendChild(playerDropdown);
 
             // Dropdown for stat
@@ -64,6 +68,23 @@
             // Add the leg row to the container
             container.appendChild(legRow);
         }
+
+        // On window load, make the first player dropdown dynamic
+        window.onload = function () {
+            const initialPlayerDropdown = document.querySelector('select[name="player"]');
+            const playerNames = {{ playerNames | tojson }}; // Pass `playerNames` from backend
+            playerNames.forEach(player => {
+                const option = document.createElement('option');
+                option.value = player;
+                option.textContent = player;
+                initialPlayerDropdown.appendChild(option);
+            });
+
+            // Set the addLegRow function to use playerNames
+            document.querySelector('.add-leg-button').onclick = function () {
+                addLegRow(playerNames);
+            };
+        };
     </script>
 </head>
 <body>
@@ -73,9 +94,7 @@
         <div class="leg">
             <select name="player">
                 <option value="" disabled selected>Select Player</option>
-                <option value="player1">Player 1</option>
-                <option value="player2">Player 2</option>
-                <option value="player3">Player 3</option>
+                <!-- Player names will be added dynamically -->
             </select>
             <select name="stat">
                 <option value="" disabled selected>Select Stat</option>
@@ -87,7 +106,7 @@
             <input type="number" name="number" placeholder="Enter Number" min="0">
         </div>
     </div>
-    <button type="button" class="add-leg-button" onclick="addLegRow()">+</button>
+    <button type="button" class="add-leg-button">+</button>
     <button class="submit-parlay">Submit Parlay</button>
 </body>
 </html>
