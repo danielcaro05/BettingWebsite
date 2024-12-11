@@ -1,11 +1,7 @@
-import time
 import requests
 
 # Your Render website URL
 RENDER_URL = "https://bettingwebsite-599p.onrender.com"
-
-# Interval between requests in seconds (10 minutes = 600 seconds)
-INTERVAL = 600
 
 def make_request():
     try:
@@ -18,11 +14,5 @@ def make_request():
         # Handle errors
         print(f"Request failed: {e}")
 
-def main():
-    while True:
-        make_request()
-        print(f"Waiting for {INTERVAL // 60} minutes...")
-        time.sleep(INTERVAL)  # Wait for 10 minutes
-
 if __name__ == "__main__":
-    main()
+    make_request()
