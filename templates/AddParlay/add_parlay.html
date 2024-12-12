@@ -1,3 +1,5 @@
+<!--TODO: Scrape DailyFaceoff for lines -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +23,103 @@
         .add-leg-button, .submit-parlay {
             margin-top: 20px;
         }
+        .collapsible {
+            background-color: #f9f9f9;
+            color: #333;
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: left;
+            width: 100%;
+            outline: none;
+            font-size: 16px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .collapsible::after {
+            content: "\25BC"; /* Down arrow Unicode */
+            font-size: 12px;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.3s ease;
+        }
+        .collapsible.active::after {
+            transform: translateY(-50%) rotate(180deg); /* Rotate arrow up */
+        }
+        .collapsible:hover {
+            background-color: #e6e6e6;
+        }
+        .content {
+            padding: 10px 15px;
+            display: none;
+            overflow: hidden;
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+            border-radius: 0 0 5px 5px;
+        }
+        .player-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .player-list li {
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        #betslip {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-top: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        #betslip h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+        #betslip-content {
+            margin: 10px 0;
+        }
+        .submit-betslip {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-betslip:hover {
+            background-color: #45a049;
+        }
+        .betslip-toggle {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .betslip-toggle::after {
+            content: "\25BC"; /* Down arrow Unicode */
+            font-size: 12px;
+            position: absolute;
+            right: 30px; /* Adjusted from 15px to 30px */
+            top: 10px;
+            transform: translateY(-50%);
+            transition: transform 0.3s ease;
+        }
+        .betslip-toggle.active::after {
+            transform: rotate(180deg); /* Rotate arrow up */
+        }
     </style>
     <script>
         let parlayData = [];
@@ -38,7 +137,6 @@
             playerDropdown.name = 'player';
             playerDropdown.innerHTML = `<option value="" disabled selected>Select Player</option>`;
 
-            // Add players dynamically to the dropdown
             playerNames.forEach(player => {
                 const option = document.createElement('option');
                 option.value = player;
@@ -67,10 +165,8 @@
             numberInput.min = '0';
             legRow.appendChild(numberInput);
 
-            // Add the leg row to the container
             container.appendChild(legRow);
         }
-
 
         // Gather data from the form and send it to the server
         function submitParlay() {
@@ -87,7 +183,11 @@
                 }
             });
 
-            // Send data to the backend
+            if (parlayData.length === 0) {
+                alert('Please add at least one valid parlay leg.');
+                return;
+            }
+
             fetch('/save_parlay', {
                 method: 'POST',
                 headers: {
@@ -97,14 +197,64 @@
             })
             .then(response => response.json())
             .then(data => alert('Parlay saved successfully!'))
-            .catch(error => console.error('Error:', error));
+            .catch(error => alert('Error saving parlay: ' + error));
         }
 
+        // Add parlay leg to betslip
+        function addToBetslip(player, stat, number) {
+            const betslipContent = document.getElementById('betslip-content');
+            const betslipItem = document.createElement('div');
+            betslipItem.textContent = `${player} ${stat} ${number}`;
+            betslipContent.appendChild(betslipItem);
+        }
 
-        // On window load, make the first player dropdown dynamic
+        // Toggle betslip content visibility
+        function toggleBetslip() {
+            const betslipContent = document.getElementById('betslip-content');
+            const betslipToggle = document.querySelector('.betslip-toggle');
+            betslipContent.style.display = betslipContent.style.display === 'none' ? 'block' : 'none';
+            betslipToggle.classList.toggle('active');
+        }
+
+        // On window load, populate player names and collapsibles
         window.onload = function () {
-            const initialPlayerDropdown = document.querySelector('select[name="player"]');
             const playerNames = {{ playerNames | tojson }}; // Pass `playerNames` from backend
+
+            // Populate collapsible sections with player names
+            const collapsibles = document.querySelectorAll('.collapsible');
+            collapsibles.forEach(collapsible => {
+                const content = collapsible.nextElementSibling;
+                const ul = document.createElement('ul');
+                ul.className = 'player-list';
+
+                playerNames.forEach(player => {
+                    const li = document.createElement('li');
+                    li.textContent = player;
+                    li.onclick = function () {
+                        const [stat, number] = collapsible.textContent.split(' ').slice(1);
+                        addToBetslip(player, stat.toLowerCase(), number);
+                    };
+                    ul.appendChild(li);
+                });
+
+                content.appendChild(ul);
+            });
+
+            // Initialize collapsible toggle functionality
+            collapsibles.forEach(collapsible => {
+                collapsible.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    if (content.style.display === 'block') {
+                        content.style.display = 'none';
+                    } else {
+                        content.style.display = 'block';
+                    }
+                });
+            });
+
+            // Add functionality for adding parlay legs
+            const initialPlayerDropdown = document.querySelector('select[name="player"]');
             playerNames.forEach(player => {
                 const option = document.createElement('option');
                 option.value = player;
@@ -112,24 +262,80 @@
                 initialPlayerDropdown.appendChild(option);
             });
 
-            // Set the addLegRow function to use playerNames
             document.querySelector('.add-leg-button').onclick = function () {
                 addLegRow(playerNames);
             };
 
-            // Bind submitParlay to the submit button
             document.querySelector('.submit-parlay').onclick = submitParlay;
+
+            // Initialize betslip toggle functionality
+            document.querySelector('.betslip-toggle').onclick = toggleBetslip;
         };
     </script>
 </head>
 <body>
     <h1>Add Parlay</h1>
+
+    <button class="collapsible">Player 1+ Shots on Goal</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 2+ Shots on Goal</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 3+ Shots on Goal</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 4+ Shots on Goal</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 5+ Shots on Goal</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 1+ Points</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 2+ Points</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 3+ Points</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 4+ Points</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 1+ Goals</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 2+ Goals</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 3+ Goals</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 1+ Assists</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 2+ Assists</button>
+    <div class="content"></div>
+
+    <button class="collapsible">Player 3+ Assists</button>
+    <div class="content"></div>
+
+    <div id="betslip">
+        <div class="betslip-toggle">
+            <h2>Betslip</h2>
+        </div>
+        <div id="betslip-content">
+            <!-- Betslip items will be dynamically added here -->
+        </div>
+        <button type="button" class="submit-betslip">Submit Betslip</button>
+    </div>
+
     <div id="legs-container">
-        <!-- Default leg row -->
         <div class="leg">
             <select name="player">
                 <option value="" disabled selected>Select Player</option>
-                <!-- Player names will be added dynamically -->
+                 Player names will be added dynamically
             </select>
             <select name="stat">
                 <option value="" disabled selected>Select Stat</option>
@@ -145,3 +351,25 @@
     <button type="button" class="submit-parlay">Submit Parlay</button>
 </body>
 </html>
+
+
+
+<!--    <div id="legs-container">-->
+<!--        <div class="leg">-->
+<!--            <select name="player">-->
+<!--                <option value="" disabled selected>Select Player</option>-->
+<!--                &lt;!&ndash; Player names will be added dynamically &ndash;&gt;-->
+<!--            </select>-->
+<!--            <select name="stat">-->
+<!--                <option value="" disabled selected>Select Stat</option>-->
+<!--                <option value="goals">Goals</option>-->
+<!--                <option value="assists">Assists</option>-->
+<!--                <option value="points">Points</option>-->
+<!--                <option value="shots">Shots</option>-->
+<!--            </select>-->
+<!--            <input type="number" name="number" placeholder="Enter Number" min="0">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <button type="button" class="add-leg-button">+</button>-->
+<!--    <button type="button" class="submit-parlay">Submit Parlay</button>-->
+
