@@ -77,6 +77,7 @@ def add_parlay():
 
 @app.route('/view_parlays', methods=['GET', 'POST'])
 def view_parlays():
+    '''
     selected_game = {
         'gameId': '2024020433',
         'awayTeamName': {
@@ -105,9 +106,12 @@ def view_parlays():
         ],
         'amount': 10,
     }
-
     all_parlays['gid']['parlays'].append(parlay1)
-    return render_template('ViewParlays/view_parlays.html', parlays=all_parlays)
+    '''
+    selected_game = request.form.get('selectedGame')
+    with open('parlays.json', 'r') as f:
+        all_parlays = json.load(f)
+    return render_template('ViewParlays/view_parlays.html', game_parlays=all_parlays[selected_game])
 
 @app.route('/to_view_parlays')
 def to_view_parlays():

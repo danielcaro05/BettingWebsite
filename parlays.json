@@ -1,9 +1,18 @@
 {
-    "parlays": [
-        {
-            "player": "Leo Carlsson",
-            "stat": "assists",
-            "number": "2"
-        }
-    ]
+    "ANA,TOR": {
+        "parlays": [
+            {
+                "leg1": {
+                    "player": "Leo Carlsson",
+                    "stat": "assists",
+                    "number": "2"
+                },
+                "leg2": {
+                    "player": "John Tavares",
+                    "stat": "goals",
+                    "number": "1"
+                }
+            }
+        ]
+    }
 }
