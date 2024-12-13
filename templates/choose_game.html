@@ -10,7 +10,7 @@
             <select name="selectedGame" required>
                 <option value="" disabled selected>Select a Game</option>
                 {% for game in games %}
-                    <option value="{{ game['awayTeamName']['short'] }},{{ game['homeTeamName']['short'] }}">
+                    <option value="{{game['gameId']}}:{{ game['awayTeamName']['short'] }},{{ game['homeTeamName']['short'] }}">
                         {{ game['startTime'] }}:
                         {{ game['awayTeamName']['long'] }} ({{ game['awayTeamName']['short'] }})
                         vs

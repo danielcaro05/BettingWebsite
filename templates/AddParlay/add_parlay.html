@@ -266,7 +266,9 @@
                 addLegRow(playerNames);
             };
 
-            document.querySelector('.submit-parlay').onclick = submitParlay;
+            document.querySelector('.submit-parlay').onclick = function () {
+                submitParlay();
+            };
 
             // Initialize betslip toggle functionality
             document.querySelector('.betslip-toggle').onclick = toggleBetslip;

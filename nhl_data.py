@@ -239,15 +239,25 @@ def get_live_game_data(game_info):
     # play by play from first to last follows, including coords of event with center ice being 0,0 --> range: x: -100 to 100, y: -42 to 42 (in feet)
     # uses team and player id's
 
-def get_live_stats(player, selected_game, isAway=True):
-
+def get_live_stats(player, gameId, isAway=True):
+    base_url = 'https://api-web.nhle.com/v1'
     live_game_endpoint = '/gamecenter/'
     boxscore_endpoint = '/boxscore'
-    live_game_dict = requests.get(base_url + live_game_endpoint + str(selected_game['gameId']) + boxscore_endpoint).json()
-    info = []
+    live_game_dict = requests.get(base_url + live_game_endpoint + gameId + boxscore_endpoint).json()
+    info = {}
     if live_game_dict['gameState'] == 'FUT': # If game has not started
-        return info
+        # return "Game has not started yet."
+        return False
     
+    for pos in ['forwards', 'defense']:
+        for team in ['awayTeam', 'homeTeam']:
+            for player in live_game_dict['playerByGameStats'][team][pos]:
+                if player['playerId'] == player['playerId']:
+                    # info.append([player['name']['default']])
+                    for stat in ['goals', 'assists', 'points', 'sog']:
+                        # info[0].append(player[stat])
+                        info[stat] = player[stat]
+    '''
     if isAway:
         for pos in ['forwards', 'defense']:
             for away_player in live_game_dict['playerByGameStats']['awayTeam'][pos]:
@@ -263,6 +273,7 @@ def get_live_stats(player, selected_game, isAway=True):
                     info.append([home_player['name']['default']])
                     for stat in ['goals', 'assists', 'sog', 'faceoffWinningPctg']:
                         info[0].append(home_player[stat])
+    '''
 
     return info
 

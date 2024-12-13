@@ -5,14 +5,18 @@
     <title>Parlay Tracker</title>
 </head>
 <body>
-{% for parlay in game_parlays['parlays'] %}
-    {% for key, leg in parlay.items() %}
-        <div>
-            <h2>{{ leg['player'] }}</h2>
-            <p>{{ leg['stat'] }}: {{ leg['number'] }}</p>
-            <progress value="{{ 1 }}" max="{{ leg['number'] }}"></progress>
-        </div>
+    {% for parlay in game_parlays['parlays'] %}
+        {% for key, leg in parlay.items() %}
+            <div>
+                <h2>{{ leg['player'] }}</h2>
+                <p>{{ leg['stat'] }}: {{ leg['number'] }}</p>
+                <progress value="{{ leg['progress'] }}" max="{{ leg['number'] }}"></progress>
+            </div>
+        {% endfor %}
     {% endfor %}
-{% endfor %}
+    <form action="/view_parlays" method="POST">
+        <input type="hidden" name="selectedGame" value="{{ game_parlays['gameId'] }}">
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
