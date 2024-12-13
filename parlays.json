@@ -4,15 +4,15 @@
         "parlays": [
             {
                 "leg1": {
-                    "player": "Michael Amadio",
-                    "stat": "assists",
-                    "number": "2",
+                    "player": "Brady Tkachuk",
+                    "stat": "sog",
+                    "number": "5",
                     "progress": "0"
                 },
                 "leg2": {
                     "player": "Drake Batherson",
-                    "stat": "goals",
-                    "number": "1",
+                    "stat": "sog",
+                    "number": "4",
                     "progress": "0"
                 }
             }
