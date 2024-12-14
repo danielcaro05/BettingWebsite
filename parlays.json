@@ -1,20 +1,20 @@
 {
-    "2024020474": {
-        "gameId": "2024020474",
+    "2024020479": {
+        "gameId": "2024020479",
         "parlays": [
             {
                 "leg1": {
-                    "player": "Connor Bedard",
+                    "player": "Mitchel Marner",
                     "playerId": "idk",
-                    "stat": "sog",
-                    "number": "5",
+                    "stat": "goals",
+                    "number": "1",
                     "progress": "0"
                 },
                 "leg2": {
-                    "player": "Tyler Bertuzzi",
+                    "player": "Auston Matthews",
                     "playerId": "idk",
-                    "stat": "sog",
-                    "number": "4",
+                    "stat": "points",
+                    "number": "2",
                     "progress": "0"
                 }
             }
