@@ -1,4 +1,8 @@
 <!--TODO: Scrape DailyFaceoff for lines -->
+<!--TODO: Take out random dropdown boxes at bottom of page without removing collapsability of betslip-->
+<!--TODO: Make Submit button work-->
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -87,6 +91,7 @@
         }
         #betslip-content {
             margin: 10px 0;
+            display: block; /* Start open */
         }
         .submit-betslip {
             display: block;
@@ -209,11 +214,22 @@
         }
 
         // Toggle betslip content visibility
+<!--        function toggleBetslip() {-->
+<!--            const betslipContent = document.getElementById('betslip-content');-->
+<!--            const betslipToggle = document.querySelector('.betslip-toggle');-->
+<!--            betslipContent.style.display = betslipContent.style.display === 'none' ? 'block' : 'none';-->
+<!--            betslipToggle.classList.toggle('active');-->
+<!--        }-->
         function toggleBetslip() {
-            const betslipContent = document.getElementById('betslip-content');
-            const betslipToggle = document.querySelector('.betslip-toggle');
-            betslipContent.style.display = betslipContent.style.display === 'none' ? 'block' : 'none';
-            betslipToggle.classList.toggle('active');
+            const betslipContent = document.getElementById("betslip-content");
+            const toggleIcon = document.getElementById("toggle-icon");
+            if (betslipContent.style.display === "block") {
+                betslipContent.style.display = "none";
+                toggleIcon.textContent = "⬆"; // Up arrow when collapsed
+            } else {
+                betslipContent.style.display = "block";
+                toggleIcon.textContent = "⬇"; // Down arrow when expanded
+            }
         }
 
         // On window load, populate player names and collapsibles
@@ -322,37 +338,29 @@
     <div class="content"></div>
 
     <div id="betslip">
-        <div class="betslip-toggle">
+        <div class="betslip-toggle" onclick="toggleBetslip()">
             <h2>Betslip</h2>
+            <span id="toggle-icon">⬆</span> <!-- Matches initial state -->
         </div>
-        <div id="betslip-content">
+        <div id="betslip-content" style="display: block;">
             <!-- Betslip items will be dynamically added here -->
         </div>
         <button type="button" class="submit-betslip">Submit Betslip</button>
     </div>
 
-    <div id="legs-container">
-        <div class="leg">
-            <select name="player">
-                <option value="" disabled selected>Select Player</option>
-                 Player names will be added dynamically
-            </select>
-            <select name="stat">
-                <option value="" disabled selected>Select Stat</option>
-                <option value="goals">Goals</option>
-                <option value="assists">Assists</option>
-                <option value="points">Points</option>
-                <option value="shots">Shots</option>
-            </select>
-            <input type="number" name="number" placeholder="Enter Number" min="0">
-        </div>
-    </div>
-    <button type="button" class="add-leg-button">+</button>
-    <button type="button" class="submit-parlay">Submit Parlay</button>
 </body>
 </html>
 
 
+
+
+
+
+
+
+
+
+<!--KEEPING FOR LATER-->
 
 <!--    <div id="legs-container">-->
 <!--        <div class="leg">-->
@@ -372,4 +380,6 @@
 <!--    </div>-->
 <!--    <button type="button" class="add-leg-button">+</button>-->
 <!--    <button type="button" class="submit-parlay">Submit Parlay</button>-->
+
+<!--^^^KEEPING FOR LATER^^^-->
 
