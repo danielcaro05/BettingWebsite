@@ -1,0 +1,20 @@
+{
+    "2024020473": {
+        "parlays": [
+            {
+                "leg1": {
+                    "player": "Michael Amadio",
+                    "stat": "assists",
+                    "number": "2",
+                    "progress": 0
+                },
+                "leg2": {
+                    "player": "Drake Batherson",
+                    "stat": "goals",
+                    "number": "1",
+                    "progress": 0
+                }
+            }
+        ]
+    }
+}

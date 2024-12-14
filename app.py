@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from testy import get_schedule, get_team_roster, findBets
+from nhl_data import get_live_stats
 import json
 
 app = Flask(__name__)
@@ -56,8 +57,9 @@ def betting_form():
 @app.route('/add_parlay', methods=['GET', 'POST'])
 def add_parlay():
     selected_game = request.form.get('selectedGame')
-    awayAbb = selected_game.split(',')[0]
-    homeAbb = selected_game.split(',')[1]
+    gameId = selected_game.split(':')[0]
+    awayAbb = selected_game.split(':')[1].split(',')[0]
+    homeAbb = selected_game.split(':')[1].split(',')[1]
 
     awayRoster = get_team_roster(awayAbb)
     homeRoster = get_team_roster(homeAbb)
@@ -77,37 +79,23 @@ def add_parlay():
 
 @app.route('/view_parlays', methods=['GET', 'POST'])
 def view_parlays():
-    selected_game = {
-        'gameId': '2024020433',
-        'awayTeamName': {
-                'short': 'TOR',
-                'long': 'Toronto Maple Leafs',
-                'Id': 10,
-            },
-        'homeTeamName': {
-                'short': 'PIT',
-                'long': 'Pittsburgh Penguins',
-                'Id': 5,
-            },
-    }
-
-    all_parlays = {
-        'gid': {
-            'game': selected_game,
-            'parlays': []
-        }
-    }
-
-    parlay1 = {
-        'legs': [
-            {'player': 'Crosby', 'bet': 'S', 'quantity': 2},
-            {'player': 'Matthews', 'bet': 'G', 'quantity': 1},
-        ],
-        'amount': 10,
-    }
-
-    all_parlays['gid']['parlays'].append(parlay1)
-    return render_template('ViewParlays/view_parlays.html', parlays=all_parlays)
+    selected_game = request.form.get('selectedGame')
+    '''
+    if ':' in selected_game:
+        gameId = selected_game.split(':')[0]
+    else:
+        gameId = selected_game'''
+    gameId = selected_game.split(':')[0] if ':' in selected_game else selected_game
+    with open('parlays.json', 'r') as f:
+        all_parlays = json.load(f)
+    for parlay in all_parlays[gameId]['parlays']:
+        for leg in parlay.values():
+            progress = get_live_stats(leg['player'], gameId)
+            if progress:
+                leg['progress'] = progress[leg['stat']]
+            else:
+                leg['progress'] = '0'
+    return render_template('ViewParlays/view_parlays.html', game_parlays=all_parlays[gameId])
 
 @app.route('/to_view_parlays')
 def to_view_parlays():
@@ -122,6 +110,7 @@ def to_add_parlay():
 @app.route('/save_parlay', methods=['POST'])
 def save_parlay():
     data = request.get_json()  # Get the JSON data from the request
+    print(data)  # Debugging: Print the data to ensure it is retrieved correctly
     try:
         # Save the data to parlays.json
         with open('parlays.json', 'w') as f:

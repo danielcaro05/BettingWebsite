@@ -1,9 +1,23 @@
 {
-    "parlays": [
-        {
-            "player": "Leo Carlsson",
-            "stat": "assists",
-            "number": "2"
-        }
-    ]
+    "2024020474": {
+        "gameId": "2024020474",
+        "parlays": [
+            {
+                "leg1": {
+                    "player": "Connor Bedard",
+                    "playerId": "idk",
+                    "stat": "sog",
+                    "number": "5",
+                    "progress": "0"
+                },
+                "leg2": {
+                    "player": "Tyler Bertuzzi",
+                    "playerId": "idk",
+                    "stat": "sog",
+                    "number": "4",
+                    "progress": "0"
+                }
+            }
+        ]
+    }
 }
