@@ -1,16 +1,18 @@
 {
-    "2024020473": {
-        "gameId": "2024020473",
+    "2024020474": {
+        "gameId": "2024020474",
         "parlays": [
             {
                 "leg1": {
-                    "player": "Brady Tkachuk",
+                    "player": "Connor Bedard",
+                    "playerId": "idk",
                     "stat": "sog",
                     "number": "5",
                     "progress": "0"
                 },
                 "leg2": {
-                    "player": "Seth Jarvis",
+                    "player": "Tyler Bertuzzi",
+                    "playerId": "idk",
                     "stat": "sog",
                     "number": "4",
                     "progress": "0"
