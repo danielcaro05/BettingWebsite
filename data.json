@@ -1,1 +1,1 @@
-{"schedule": [{"gameId": 2024190003, "startTime": "01:00 PM", "awayTeamName": {"short": "FIN", "long": "Invalid team name", "Id": 62}, "homeTeamName": {"short": "SWE", "long": "Invalid team name", "Id": 66}}, {"gameId": 2024190004, "startTime": "08:00 PM", "awayTeamName": {"short": "USA", "long": "Invalid team name", "Id": 67}, "homeTeamName": {"short": "CAN", "long": "Invalid team name", "Id": 60}}], "rosters": {"SWE": [], "FIN": [], "CAN": [], "USA": []}}
+{"schedule": [], "rosters": {}}
